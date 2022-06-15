@@ -1,13 +1,8 @@
-<h2>Motivation</h2>
-play with server side rendering using getServerSideProps
+import React, { useEffect, useState } from "react";
+import styles from "../../styles/Pokemons.module.css";
 
+const url = "https://jherr-pokemon.s3.us-west-1.amazonaws.com/index.json";
 
-<h2>Implementation</h2>
-
-<p>This function is defined in pokemons page</p>
-
-
-```ts
 export async function getServerSideProps() {
   const response = await fetch(url);
   const jsonPokemons = await response.json();
@@ -17,11 +12,13 @@ export async function getServerSideProps() {
     props: {pokemons:jsonPokemons}
   };
 }
-```
 
-<p>getServerSideProps is invoked on the server and jsonPokemons is passed to Pokemons component as props. so no need for useState and useEffect in Pokemons</p>
+interface IPokemon {
+  id: number;
+  name: string;
+  image: string;
+}
 
-```ts
 const Pokemons = (props: {pokemons : IPokemon[]}) => {
   console.log(props);
 
@@ -44,8 +41,4 @@ const Pokemons = (props: {pokemons : IPokemon[]}) => {
   );
 };
 
-```
-
-
-
-
+export default Pokemons;
