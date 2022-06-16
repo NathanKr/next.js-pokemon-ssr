@@ -71,7 +71,7 @@ notice typescript intelisense
 ```ts
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { pokemonId } = context.query;
+  const { pokemonId } = context.params;
   let jsonPokemonDetails;
 
   if (pokemonId) {

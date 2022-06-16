@@ -14,7 +14,7 @@ interface IPokemonDetails {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { pokemonId } = context.query;
+  const { pokemonId } = context.params as any;
   let jsonPokemonDetails;
 
   if (pokemonId) {
