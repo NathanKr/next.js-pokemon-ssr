@@ -15,21 +15,23 @@ interface IPokemonDetails {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { pokemonId } = context.params as any;
-  let jsonPokemonDetails;
+  let pokemonDetails: IPokemonDetails | undefined = undefined;
 
   if (pokemonId) {
     const url = `https://jherr-pokemon.s3.us-west-1.amazonaws.com/pokemon/${pokemonId}.json`;
     const response = await fetch(url);
-    jsonPokemonDetails = await response.json();
+    pokemonDetails = await response.json();
   }
 
   return {
     // props will be passed to the page component as props
-    props: { pokemonDetails: jsonPokemonDetails },
+    props: { pokemonDetails },
   };
 };
 
-const PokemonDetails = (props: { pokemonDetails: IPokemonDetails }) => {
+const PokemonDetails = (props: {
+  pokemonDetails: IPokemonDetails | undefined;
+}) => {
   const { pokemonDetails } = props;
 
   if (!pokemonDetails) {
@@ -57,7 +59,10 @@ const PokemonDetails = (props: { pokemonDetails: IPokemonDetails }) => {
       <h2>
         This pokemon details are fetched using SSR function getServerSideProps
       </h2>
-      <h4>thus <span style={{color:'red'}}>html document</span> is downloaded to the client</h4>
+      <h4>
+        thus <span style={{ color: "red" }}>html document</span> is downloaded
+        to the client
+      </h4>
       <div className={styles.PokemonDetails}>
         <img src={imgUrl} alt="image" />
         <div>

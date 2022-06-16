@@ -5,11 +5,11 @@ const url = "https://jherr-pokemon.s3.us-west-1.amazonaws.com/index.json";
 
 export async function getServerSideProps() {
   const response = await fetch(url);
-  const jsonPokemons = await response.json();
+  const pokemons : IPokemon[] = await response.json();
 
   return {
     // props will be passed to the page component as props
-    props: { pokemons: jsonPokemons },
+    props: { pokemons },
   };
 }
 
