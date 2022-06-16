@@ -1,6 +1,5 @@
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
 import styles from "../../styles/PokemonDetails.module.css";
+import { GetServerSideProps } from "next";
 
 interface IStat {
   name: string;
@@ -14,27 +13,30 @@ interface IPokemonDetails {
   image: string;
 }
 
-const PokemonDetails = () => {
-  const router = useRouter();
-  const { pokemonId } = router.query;
-  useEffect(getPokemon, [pokemonId]);
-  const [pokemonDetails, setPokemonDetails] = useState<IPokemonDetails>();
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { pokemonId } = context.query;
+  let jsonPokemonDetails;
 
-  function getPokemon() {
-    if (pokemonId) {
-      const url = `https://jherr-pokemon.s3.us-west-1.amazonaws.com/pokemon/${pokemonId}.json`;
-      fetch(url)
-        .then((res) => res.json())
-        .then((data) => setPokemonDetails(data))
-        .catch((err) => console.error(err));
-    }
+  if (pokemonId) {
+    const url = `https://jherr-pokemon.s3.us-west-1.amazonaws.com/pokemon/${pokemonId}.json`;
+    const response = await fetch(url);
+    jsonPokemonDetails = await response.json();
   }
+
+  return {
+    // props will be passed to the page component as props
+    props: { pokemonDetails: jsonPokemonDetails },
+  };
+};
+
+const PokemonDetails = (props: { pokemonDetails: IPokemonDetails }) => {
+  const { pokemonDetails } = props;
 
   if (!pokemonDetails) {
     return <div>Details are undefined ........</div>;
   }
 
-  const statsElem = pokemonDetails.stats.map((it,i) => (
+  const statsElem = pokemonDetails.stats.map((it, i) => (
     <tr key={i}>
       <td>{it.name}</td>
       <td>{it.value}</td>
@@ -51,12 +53,18 @@ const PokemonDetails = () => {
   );
   const imgUrl = `/${pokemonDetails.image}`;
   return (
-    <div className={styles.PokemonDetails}>
-      <img src={imgUrl} alt="image" />
-      <div>
-        <h3>{pokemonDetails.name}</h3>
-        <p>{pokemonDetails.type}</p>
-        {tableElem}
+    <div>
+      <h2>
+        This pokemon details are fetched using SSR function getServerSideProps
+      </h2>
+      <h4>thus <span style={{color:'red'}}>html document</span> is downloaded to the client</h4>
+      <div className={styles.PokemonDetails}>
+        <img src={imgUrl} alt="image" />
+        <div>
+          <h3>{pokemonDetails.name}</h3>
+          <p>{pokemonDetails.type}</p>
+          {tableElem}
+        </div>
       </div>
     </div>
   );

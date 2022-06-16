@@ -1,5 +1,5 @@
 <h2>Motivation</h2>
-play with server side rendering using getServerSideProps
+play with server side rendering using getServerSideProps in Pokemons.tsx and PokemonDetails.tsx
 
 <h2>Top level schema</h2>
 
@@ -9,11 +9,11 @@ play with server side rendering using getServerSideProps
 <h2>The core idea</h2>
 A page component that implement getServerSideProps (Pokemons component) fetch data and render on the server and the resulting HTML is downloaded to the client !!!!!!!!!!
 
-<h2>HTML is created on the server</h2>
+<h3>HTML is created on the server</h3>
 
 ![html-created](./figs/html_is_rendered_on_the_server_and_donload_to_the_client.png)
 
-<h2>Implementation</h2>
+<h2>SSR Implementation in Pokemons.tsx</h2>
 
 <p>This function is defined in pokemons page</p>
 
@@ -57,6 +57,33 @@ const Pokemons = (props: {pokemons : IPokemon[]}) => {
 
 ```
 
+<h2>SSR Implementation in PokemonDetails.tsx</h2>
 
+<h3>typescript</h3>
+notice typescript intelisense
 
+![intelisense](./figs//ts-context-intelisense.png)
 
+<h3>code</h3>
+```ts
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { pokemonId } = context.query;
+  let jsonPokemonDetails;
+
+  if (pokemonId) {
+    const url = `https://jherr-pokemon.s3.us-west-1.amazonaws.com/pokemon/${pokemonId}.json`;
+    const response = await fetch(url);
+    jsonPokemonDetails = await response.json();
+  }
+
+  return {
+    // props will be passed to the page component as props
+    props: { pokemonDetails: jsonPokemonDetails },
+  };
+};
+
+const Pokemons = (props: { pokemons: IPokemon[] }) => {
+.....
+}
+
+```
