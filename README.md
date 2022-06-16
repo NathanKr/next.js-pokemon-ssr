@@ -19,6 +19,7 @@ A page component that implement getServerSideProps (Pokemons component) fetch da
 
 
 ```ts
+
 export async function getServerSideProps() {
   const response = await fetch(url);
   const jsonPokemons = await response.json();
@@ -33,6 +34,7 @@ export async function getServerSideProps() {
 <p>getServerSideProps is invoked on the server and jsonPokemons is passed to Pokemons component as props. so no need for useState and useEffect in Pokemons</p>
 
 ```ts
+
 const Pokemons = (props: {pokemons : IPokemon[]}) => {
   console.log(props);
 
@@ -65,7 +67,9 @@ notice typescript intelisense
 ![intelisense](./figs//ts-context-intelisense.png)
 
 <h3>code</h3>
+
 ```ts
+
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { pokemonId } = context.query;
   let jsonPokemonDetails;
