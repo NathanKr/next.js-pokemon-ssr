@@ -7,7 +7,7 @@ play with server side rendering using getServerSideProps in Pokemons.tsx and Pok
 
 
 <h2>The core idea</h2>
-A page component that implement getServerSideProps (Pokemons component) fetch data and render on the server and the resulting HTML is downloaded to the client !!!!!!!!!!
+A page component that implement getServerSideProps (Pokemons component) fetch data and render PER REQUEST on the server and the resulting HTML is downloaded to the client !!!!!!!!!!. This looks perfect when the data is changing after build
 
 <h3>HTML is created on the server</h3>
 
